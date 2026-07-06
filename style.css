@@ -186,8 +186,19 @@ nav {
 
 .nav-links {
   display: flex;
+  align-items: center;
   list-style: none;
   gap: 0.3rem;
+}
+
+.nav-links li {
+  display: flex;
+  align-items: center;
+}
+
+.nav-links a {
+  display: inline-flex;
+  align-items: center;
 }
 
 .nav-links a {

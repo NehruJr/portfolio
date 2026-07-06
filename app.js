@@ -384,12 +384,12 @@ function initHeroGem() {
   );
   gemGroup.add(edgeLines);
 
-  // Orbiting sparkle particles
+  // A light layer of ambient sparkle, kept subtle so the stack badges read clearly
   const sparkleTex = makeSparkleTexture();
-  const sparkleCount = isMobile ? 40 : 80;
+  const sparkleCount = isMobile ? 16 : 28;
   const positions = new Float32Array(sparkleCount * 3);
   for (let i = 0; i < sparkleCount; i++) {
-    const r = 2.3 + Math.random() * 1.1;
+    const r = 2.2 + Math.random() * 0.9;
     const theta = Math.random() * Math.PI * 2;
     const phi = Math.acos(2 * Math.random() - 1);
     positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
@@ -399,7 +399,7 @@ function initHeroGem() {
   const sparkleGeo = new THREE.BufferGeometry();
   sparkleGeo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
   const sparkleMat = new THREE.PointsMaterial({
-    size: 0.14,
+    size: 0.1,
     map: sparkleTex,
     transparent: true,
     depthWrite: false,
@@ -422,6 +422,75 @@ function initHeroGem() {
     ctx.fillRect(0, 0, size, size);
     return new THREE.CanvasTexture(c);
   }
+
+  // Orbiting tech-stack badges — ties the centerpiece gem directly to the real stack
+  const STACK = [
+    { label: "Flutter", color: "#9b5cff" },
+    { label: "Dart", color: "#35f0c2" },
+    { label: "Firebase", color: "#ffcf4d" },
+    { label: "GraphQL", color: "#ff5da2" },
+    { label: "Swift", color: "#4fb8ff" },
+    { label: "Git", color: "#c9aaff" },
+  ];
+
+  function roundRectPath(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  function makeBadgeTexture(label, color) {
+    const w = 300,
+      h = 108;
+    const c = document.createElement("canvas");
+    c.width = w;
+    c.height = h;
+    const ctx = c.getContext("2d");
+    roundRectPath(ctx, 4, 4, w - 8, h - 8, 30);
+    ctx.fillStyle = "rgba(8,7,18,0.88)";
+    ctx.fill();
+    ctx.lineWidth = 4;
+    ctx.strokeStyle = color;
+    ctx.stroke();
+    ctx.fillStyle = "#f4f1ff";
+    ctx.font = "600 42px 'JetBrains Mono', monospace";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(label, w / 2, h / 2 + 3);
+    return new THREE.CanvasTexture(c);
+  }
+
+  const badgeGroup = new THREE.Group();
+  scene.add(badgeGroup);
+  const badges = [];
+
+  STACK.forEach((s, i) => {
+    const tex = makeBadgeTexture(s.label, s.color);
+    const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false });
+    const sprite = new THREE.Sprite(mat);
+    const w = 0.82;
+    sprite.scale.set(w, w * (108 / 300), 1);
+
+    const phi = Math.acos(1 - (2 * (i + 0.5)) / STACK.length);
+    const theta = Math.PI * (1 + Math.sqrt(5)) * i;
+    const r = 2.75;
+    sprite.position.set(
+      r * Math.sin(phi) * Math.cos(theta),
+      r * Math.sin(phi) * Math.sin(theta),
+      r * Math.cos(phi)
+    );
+    sprite.userData = {
+      basePos: sprite.position.clone(),
+      phase: Math.random() * Math.PI * 2,
+      speed: 0.3 + Math.random() * 0.2,
+    };
+    badgeGroup.add(sprite);
+    badges.push(sprite);
+  });
 
   // Sizing
   function resize() {
@@ -501,6 +570,15 @@ function initHeroGem() {
       sparkles.rotation.x = Math.sin(t * 0.1) * 0.1;
       pinkLight.intensity = 4.5 + Math.sin(t * 0.9) * 1.2;
       mintLight.intensity = 3.5 + Math.cos(t * 0.7) * 1.2;
+
+      badgeGroup.rotation.y = t * 0.11;
+      badgeGroup.rotation.x = Math.sin(t * 0.08) * 0.15;
+      badges.forEach((b) => {
+        const d = b.userData;
+        const bob = Math.sin(t * d.speed + d.phase) * 0.06;
+        b.position.copy(d.basePos);
+        b.position.y += bob;
+      });
     }
 
     renderer.render(scene, camera);
@@ -540,29 +618,70 @@ function initAmbientField() {
   scene.add(l2);
 
   const palette = [0x9b5cff, 0xff5da2, 0x35f0c2, 0x4fb8ff, 0xffcf4d];
-  const count = isMobile ? 16 : 34;
+  const count = isMobile ? 7 : 15;
   const shards = [];
   const group = new THREE.Group();
   scene.add(group);
 
+  // Code-symbol glyphs, cut with a gem bevel so they still belong in the vault.
+  const GLYPHS = ["chevronLeft", "chevronRight", "bracketLeft", "bracketRight", "slash"];
+
+  function glyphShape(type) {
+    const shape = new THREE.Shape();
+    const t = 0.15;
+    if (type === "bracketLeft") {
+      const w = 0.36, h = 0.64;
+      shape.moveTo(0, 0); shape.lineTo(0, h); shape.lineTo(w, h);
+      shape.lineTo(w, h - t); shape.lineTo(t, h - t); shape.lineTo(t, t);
+      shape.lineTo(w, t); shape.lineTo(w, 0); shape.closePath();
+    } else if (type === "bracketRight") {
+      const w = 0.36, h = 0.64;
+      shape.moveTo(w, 0); shape.lineTo(w, h); shape.lineTo(0, h);
+      shape.lineTo(0, h - t); shape.lineTo(w - t, h - t); shape.lineTo(w - t, t);
+      shape.lineTo(0, t); shape.lineTo(0, 0); shape.closePath();
+    } else if (type === "chevronLeft") {
+      const w = 0.52, h = 0.64;
+      shape.moveTo(w, 0); shape.lineTo(w, t * 1.7); shape.lineTo(t * 1.5, h / 2);
+      shape.lineTo(w, h - t * 1.7); shape.lineTo(w, h); shape.lineTo(0, h / 2);
+      shape.closePath();
+    } else if (type === "chevronRight") {
+      const w = 0.52, h = 0.64;
+      shape.moveTo(0, 0); shape.lineTo(0, t * 1.7); shape.lineTo(w - t * 1.5, h / 2);
+      shape.lineTo(0, h - t * 1.7); shape.lineTo(0, h); shape.lineTo(w, h / 2);
+      shape.closePath();
+    } else {
+      const w = 0.22, h = 0.7, skew = 0.26;
+      shape.moveTo(skew, 0); shape.lineTo(skew + w, 0); shape.lineTo(w, h);
+      shape.lineTo(0, h); shape.closePath();
+    }
+    return shape;
+  }
+
   for (let i = 0; i < count; i++) {
-    const pick = i % 3;
-    let geo;
-    if (pick === 0) geo = new THREE.OctahedronGeometry(0.28 + Math.random() * 0.22, 0);
-    else if (pick === 1) geo = new THREE.IcosahedronGeometry(0.24 + Math.random() * 0.2, 0);
-    else geo = new THREE.TetrahedronGeometry(0.3 + Math.random() * 0.22, 0);
+    const type = GLYPHS[i % GLYPHS.length];
+    let geo = new THREE.ExtrudeGeometry(glyphShape(type), {
+      depth: 0.14,
+      bevelEnabled: true,
+      bevelThickness: 0.035,
+      bevelSize: 0.025,
+      bevelSegments: 1,
+    });
+    geo.center();
     geo = geo.toNonIndexed();
     geo.computeVertexNormals();
 
-    const mat = new THREE.MeshStandardMaterial({
+    const mat = new THREE.MeshPhysicalMaterial({
       color: palette[i % palette.length],
-      roughness: 0.35,
-      metalness: 0.2,
+      roughness: 0.25,
+      metalness: 0.1,
+      clearcoat: 0.6,
+      clearcoatRoughness: 0.25,
       transparent: true,
-      opacity: 0.5,
+      opacity: 0.58,
     });
 
     const mesh = new THREE.Mesh(geo, mat);
+    mesh.scale.setScalar(0.8 + Math.random() * 0.6);
     const x = (Math.random() - 0.5) * 22;
     const y = (Math.random() - 0.5) * 16;
     const z = (Math.random() - 0.5) * 12 - 3;
