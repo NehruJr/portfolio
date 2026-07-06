@@ -9,6 +9,28 @@ const isMobile = window.matchMedia("(max-width: 640px)").matches;
    ========================================================================== */
 
 const PROJECTS = [
+   {
+    name: "Otayo",
+    icon: "assets/otayo.png",
+    color: "pink",
+    desc: "The number 1 events, tickets and seating app in Mauritius.",
+    tech: ["Flutter", "Bloc", "Seats.io", "MCB Pay"],
+    links: [
+      { kind: "play", url: "https://play.google.com/store/apps/details?id=com.otayo.otayoapp&hl=en" },
+      { kind: "appstore", url: "https://apps.apple.com/mu/app/otayo-events-tickets-more/id6503912805" },
+    ],
+  },
+   {
+    name: "Team Salama",
+    icon: "assets/t-s-logo.png",
+    color: "pink",
+    desc: "A personal-trainer app for a transformative, guided fitness journey.",
+    tech: ["Flutter", "Bloc", "Video", "Hive"],
+    links: [
+      { kind: "play", url: "https://play.google.com/store/apps/details?id=com.teamsalama.teamsalama" },
+      { kind: "appstore", url: "https://apps.apple.com/eg/app/team-salama/id6478572631" },
+    ],
+  },
   {
     name: "Alkan",
     icon: "assets/alkan.png",
@@ -61,28 +83,8 @@ const PROJECTS = [
       { kind: "web", url: "https://www.zunko.app/" },
     ],
   },
-  {
-    name: "Team Salama",
-    icon: "assets/t-s-logo.png",
-    color: "pink",
-    desc: "A personal-trainer app for a transformative, guided fitness journey.",
-    tech: ["Flutter", "Bloc", "Video", "Hive"],
-    links: [
-      { kind: "play", url: "https://play.google.com/store/apps/details?id=com.teamsalama.teamsalama" },
-      { kind: "appstore", url: "https://apps.apple.com/eg/app/team-salama/id6478572631" },
-    ],
-  },
-  {
-    name: "Otayo",
-    icon: "assets/otayo.png",
-    color: "pink",
-    desc: "The number 1 events, tickets and seating app in Mauritius.",
-    tech: ["Flutter", "Bloc", "Seats.io", "MCB Pay"],
-    links: [
-      { kind: "play", url: "https://play.google.com/store/apps/details?id=com.otayo.otayoapp&hl=en" },
-      { kind: "appstore", url: "https://apps.apple.com/mu/app/otayo-events-tickets-more/id6503912805" },
-    ],
-  },
+ 
+ 
   {
     name: "ADVEC",
     icon: "assets/advec.png",
