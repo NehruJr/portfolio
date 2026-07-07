@@ -79,7 +79,6 @@ const PROJECTS = [
     desc: "Seamless stock trading — live charts, market data and a gateway to investing.",
     tech: ["Flutter", "Bloc", "Charts", "Market APIs"],
     links: [
-      { kind: "appstore", url: "https://apps.apple.com/by/app/zunko-trade-your-way-up/id6449503810" },
       { kind: "web", url: "https://www.zunko.app/" },
     ],
   },
@@ -119,6 +118,14 @@ const PROJECTS = [
     desc: "Keeps parents connected to their child's Islamic education journey.",
     tech: ["Flutter", "Bloc", "Charts"],
     links: [{ kind: "play", url: "https://play.google.com/store/apps/details?id=com.rewaq.rewaq" }],
+  },
+  {
+    name: "Fly mart",
+    icon: "assets/flymart-logo.png",
+    color: "pink",
+    desc: "FlyMart is a multi-merchant online store for selling products.",
+    tech: ["IOS Native", "UIKit", "Tamara Payment"],
+    links: [{ kind: "appstore", url: "https://apps.apple.com/eg/app/%D9%81%D9%84%D8%A7%D9%8A-%D9%85%D8%A7%D8%B1%D8%AA/id1670689288?l=ar" }],
   },
 ];
 
