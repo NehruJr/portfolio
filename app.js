@@ -83,7 +83,6 @@ const PROJECTS = [
     ],
   },
  
- 
   {
     name: "ADVEC",
     icon: "assets/advec.png",
@@ -110,14 +109,6 @@ const PROJECTS = [
     desc: "Real estate, reinvented — browsing and discovery built for how people actually search.",
     tech: ["Flutter", "GetX", "Maps"],
     links: [{ kind: "appstore", url: "https://apps.apple.com/eg/app/darna-re/id6744989458" }],
-  },
-  {
-    name: "Rewaq",
-    icon: "assets/rewaq.png",
-    color: "pink",
-    desc: "Keeps parents connected to their child's Islamic education journey.",
-    tech: ["Flutter", "Bloc", "Charts"],
-    links: [{ kind: "play", url: "https://play.google.com/store/apps/details?id=com.rewaq.rewaq" }],
   },
   {
     name: "Fly mart",
