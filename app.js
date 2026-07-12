@@ -162,6 +162,111 @@ function renderVault() {
 renderVault();
 
 /* ==========================================================================
+   1b. EXPERIENCE DATA — the quest log timeline
+   ========================================================================== */
+
+const EXPERIENCE = [
+  {
+    role: "Senior Mobile Application Developer",
+    company: "ADVEC",
+    location: "Cairo, Egypt",
+    dates: "Mar 2024 — Present",
+    color: "violet",
+    bullets: [
+      "Leading the mobile team, delivering Flutter projects end-to-end.",
+      "Maintaining and optimizing a production React Native application.",
+      "Mentoring junior developers and driving agile, CI/CD-backed workflows.",
+    ],
+  },
+  {
+    role: "Mobile Application Developer",
+    company: "Freelance",
+    location: "Remote",
+    dates: "Jul 2023 — Mar 2024",
+    color: "sapphire",
+    bullets: [
+      "Shipped Flutter apps across health &amp; fitness (Team Salama), real estate &amp; auctions (Darna), and transportation (Wosol).",
+      "Added a reservation system and the Tamara payment gateway to an existing native iOS (UIKit) app.",
+      "Implemented Google Maps and real-time tracking for live location and route-based services.",
+    ],
+  },
+  {
+    role: "Flutter Developer",
+    company: "Aya Trades",
+    location: "Remote · Contract",
+    dates: "Jul 2023 — Feb 2024",
+    color: "mint",
+    bullets: [
+      "Built an event reservation app for Otayo, the largest events company in Mauritius.",
+    ],
+  },
+  {
+    role: "Flutter Developer",
+    company: "Zunko",
+    location: "Remote",
+    dates: "Aug 2022 — Jul 2023",
+    color: "pink",
+    bullets: [
+      "Migrated a trading app from GetX to BLoC/Cubit, improving scalability and maintainability.",
+      "Integrated Firebase Analytics to support data-driven product decisions.",
+      "Developed a real-time stock trading platform with live market data and buy/sell functionality.",
+    ],
+  },
+  {
+    role: "Software Engineer Intern",
+    company: "Aya Trades",
+    location: "Remote",
+    dates: "Jun 2022 — Aug 2022",
+    color: "citrine",
+    bullets: [
+      "Maintained and updated an existing Flutter mobile application.",
+      "Built custom multiplayer features in an Unreal Engine 5 project with C++ and deployed it to AWS.",
+    ],
+  },
+  {
+    role: "Flutter Developer Intern",
+    company: "Connect Idea",
+    location: "Remote",
+    dates: "Mar 2022 — May 2022",
+    color: "violet",
+    bullets: [
+      "Developed a clinic app using Flutter and GetX for state management.",
+      "Implemented custom Firebase functions to enable Instagram login and signup.",
+    ],
+  },
+];
+
+function renderQuestLog() {
+  const log = document.getElementById("quest-log");
+  if (!log) return;
+  const frag = document.createDocumentFragment();
+
+  EXPERIENCE.forEach((role, i) => {
+    const item = document.createElement("div");
+    item.className = "quest-item reveal";
+    item.style.transitionDelay = `${(i % 4) * 0.05}s`;
+
+    const bullets = role.bullets.map((b) => `<li>${b}</li>`).join("");
+
+    item.innerHTML = `
+      <div class="quest-marker" style="--qm-color: var(--${role.color})"></div>
+      <div class="quest-card" style="--qm-color: var(--${role.color})">
+        <div class="quest-head">
+          <span class="quest-role">${role.role}</span>
+          <span class="quest-dates">${role.dates}</span>
+        </div>
+        <div class="quest-company"><strong>${role.company}</strong> · ${role.location}</div>
+        <ul class="quest-bullets">${bullets}</ul>
+      </div>
+    `;
+    frag.appendChild(item);
+  });
+
+  log.appendChild(frag);
+}
+renderQuestLog();
+
+/* ==========================================================================
    2. SCROLL PROGRESS HUD
    ========================================================================== */
 
