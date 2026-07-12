@@ -940,6 +940,96 @@ section {
 }
 
 /* ==========================================================================
+   Certifications — The Trophy Case
+   ========================================================================== */
+
+.cert-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.cert-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.cert-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.3rem;
+}
+
+.icon-frame.cert-icon .inner {
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-frame.cert-icon i {
+  font-size: 1.4rem;
+  color: var(--paper);
+}
+
+.cert-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--f-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--gc-color);
+  background: color-mix(in srgb, var(--gc-color) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--gc-color) 30%, transparent);
+  padding: 0.32rem 0.6rem;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+
+.cert-card h3 {
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--paper);
+  margin-bottom: 0.4rem;
+}
+
+.cert-issuer {
+  color: var(--dim);
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.cert-verify {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  align-self: flex-start;
+  font-family: var(--f-mono);
+  font-size: 0.75rem;
+  color: var(--paper);
+  text-decoration: none;
+  padding: 0.6rem 1.05rem;
+  border-radius: 100px;
+  border: 1px solid var(--line-soft);
+  background: rgba(244, 241, 255, 0.03);
+  transition: all 0.3s ease;
+}
+
+.cert-verify:hover {
+  background: var(--gc-color);
+  color: var(--void);
+  border-color: var(--gc-color);
+  transform: translateY(-3px);
+}
+
+.cert-verify i {
+  font-size: 0.7rem;
+}
+
+/* ==========================================================================
    Contact — Send a Signal
    ========================================================================== */
 
@@ -997,34 +1087,6 @@ section {
 
 .contact-item a:hover {
   color: var(--violet-soft);
-}
-
-.cert-strip {
-  margin-top: 1.8rem;
-  padding-top: 1.6rem;
-  border-top: 1px solid var(--line-soft);
-}
-
-.cert-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
-
-.cert-list span {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-family: var(--f-mono);
-  font-size: 0.76rem;
-  color: var(--dim);
-  line-height: 1.4;
-}
-
-.cert-list i {
-  color: var(--citrine);
-  font-size: 0.9rem;
-  flex-shrink: 0;
 }
 
 .form-group {

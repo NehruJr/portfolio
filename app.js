@@ -267,6 +267,63 @@ function renderQuestLog() {
 renderQuestLog();
 
 /* ==========================================================================
+   1c. CERTIFICATIONS DATA — the trophy case
+   ========================================================================== */
+
+const CERTIFICATIONS = [
+  {
+    name: "Android UI Development",
+    issuer: "Meta · Coursera Specialization",
+    icon: "fa-brands fa-android",
+    color: "mint",
+    url: "https://www.coursera.org/account/accomplishments/specialization/05M4EFOJGSWK",
+  },
+  {
+    name: "Create the User Interface with SwiftUI",
+    issuer: "Meta · Coursera",
+    icon: "fa-brands fa-swift",
+    color: "citrine",
+    url: "https://www.coursera.org/account/accomplishments/verify/OC9TV48I5BKS",
+  },
+  {
+    name: "User Experience Design",
+    issuer: "Edraak",
+    icon: "fa-solid fa-compass-drafting",
+    color: "pink",
+    url: "https://courses.edraak.org/certificates/562d23e9a7194b13b064c89f9269202a",
+  },
+];
+
+function renderCertifications() {
+  const grid = document.getElementById("cert-grid");
+  if (!grid) return;
+  const frag = document.createDocumentFragment();
+
+  CERTIFICATIONS.forEach((c, i) => {
+    const card = document.createElement("div");
+    card.className = "gem-card cert-card reveal";
+    card.style.setProperty("--gc-color", `var(--${c.color})`);
+    card.style.transitionDelay = `${(i % 3) * 0.06}s`;
+
+    card.innerHTML = `
+      <div class="cert-top">
+        <div class="icon-frame cert-icon"><div class="inner"><i class="${c.icon}"></i></div></div>
+        <span class="cert-badge"><i class="fa-solid fa-circle-check"></i>Verified</span>
+      </div>
+      <h3>${c.name}</h3>
+      <p class="cert-issuer">${c.issuer}</p>
+      <a class="cert-verify" href="${c.url}" target="_blank" rel="noopener noreferrer" aria-label="Verify ${c.name} credential">
+        View credential <i class="fa-solid fa-arrow-up-right-from-square"></i>
+      </a>
+    `;
+    frag.appendChild(card);
+  });
+
+  grid.appendChild(frag);
+}
+renderCertifications();
+
+/* ==========================================================================
    2. SCROLL PROGRESS HUD
    ========================================================================== */
 
