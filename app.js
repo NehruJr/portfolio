@@ -484,7 +484,7 @@ function fireConfetti() {
 }
 
 /* ==========================================================================
-   7. HERO GEM — the signature interactive crystal
+   7. HERO LOGO — the signature interactive 3D logo card (drag to spin)
    ========================================================================== */
 
 function initHeroGem() {
@@ -518,31 +518,63 @@ function initHeroGem() {
   const gemGroup = new THREE.Group();
   scene.add(gemGroup);
 
-  // Faceted core: flat-shaded icosahedron for crisp gem-cut look
-  const coreGeo = new THREE.IcosahedronGeometry(1.65, 0).toNonIndexed();
-  coreGeo.computeVertexNormals();
-  const coreMat = new THREE.MeshPhysicalMaterial({
-    color: 0x9b5cff,
-    metalness: 0,
-    roughness: 0.06,
-    transmission: 0.88,
-    thickness: 1.8,
-    ior: 2.1,
-    clearcoat: 1,
-    clearcoatRoughness: 0.1,
-    iridescence: 1,
-    iridescenceIOR: 1.3,
-    iridescenceThicknessRange: [120, 420],
-    envMapIntensity: 1.4,
+  // The centerpiece: the real logo, built as a rotatable 3D plaque (replaces the old
+  // faceted crystal). It's a textured box, so it has real thickness — front, back and
+  // bevelled edges — rather than a flat sprite, and reads correctly from every angle.
+  const LOGO_ASPECT = 900 / 742; // assets/rn-logo-card.png width / height
+  const cardW = 3.15;
+  const cardH = cardW / LOGO_ASPECT;
+  const cardDepth = 0.34;
+
+  const texLoader = new THREE.TextureLoader();
+  const logoTexture = texLoader.load("assets/rn-logo-card.png");
+  logoTexture.colorSpace = THREE.SRGBColorSpace;
+  logoTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+
+  // A horizontally-flipped texture for the back face (loaded independently rather
+  // than cloned, so its own onLoad lifecycle is guaranteed correct), so the logo
+  // reads properly — not mirrored — when the card is spun all the way around.
+  const logoTextureBack = texLoader.load("assets/rn-logo-card.png");
+  logoTextureBack.wrapS = THREE.ClampToEdgeWrapping;
+  logoTextureBack.repeat.x = -1;
+  logoTextureBack.offset.x = 1;
+  logoTextureBack.colorSpace = THREE.SRGBColorSpace;
+
+  const faceMaterial = (map) =>
+    new THREE.MeshPhysicalMaterial({
+      map,
+      roughness: 0.3,
+      metalness: 0.05,
+      clearcoat: 0.7,
+      clearcoatRoughness: 0.2,
+      envMapIntensity: 1.35,
+    });
+  const edgeMaterial = new THREE.MeshPhysicalMaterial({
+    color: 0x241a44,
+    roughness: 0.32,
+    metalness: 0.45,
+    clearcoat: 0.6,
+    clearcoatRoughness: 0.28,
+    envMapIntensity: 1.2,
   });
-  const core = new THREE.Mesh(coreGeo, coreMat);
+
+  const cardGeo = new THREE.BoxGeometry(cardW, cardH, cardDepth);
+  // BoxGeometry material groups are ordered: +x, -x, +y, -y, +z (front), -z (back)
+  const core = new THREE.Mesh(cardGeo, [
+    edgeMaterial,
+    edgeMaterial,
+    edgeMaterial,
+    edgeMaterial,
+    faceMaterial(logoTexture),
+    faceMaterial(logoTextureBack),
+  ]);
   gemGroup.add(core);
 
-  // Edge lines to define facets
-  const edges = new THREE.EdgesGeometry(coreGeo, 1);
+  // Crisp bevel outline, echoing the gem-cut facet lines the crystal used to have
+  const edges = new THREE.EdgesGeometry(cardGeo, 1);
   const edgeLines = new THREE.LineSegments(
     edges,
-    new THREE.LineBasicMaterial({ color: 0xf4f1ff, transparent: true, opacity: 0.35 })
+    new THREE.LineBasicMaterial({ color: 0xf4f1ff, transparent: true, opacity: 0.3 })
   );
   gemGroup.add(edgeLines);
 
